@@ -1,65 +1,58 @@
 package br.com.upnid.entities;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@SuppressWarnings("serial")
 @Entity
-public class User implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private String nome;
+@Table(name = "usuarios", indexes = {@Index(name = "idx_usuario_email", columnList = "email")})
+public class User extends AbstractEntity {	
+	
+	@Column(name = "email", unique = true, nullable = false)
 	private String email;
-	private String password;
-	private boolean ativo;
+	
+	@JsonIgnore
+	@Column(name = "senha", nullable = false)
+	private String senha;
 	
 	@ManyToMany
-    private Set<Roles> roles;
+	@JoinTable(
+		name = "usuarios_tem_perfis", 
+        joinColumns = { @JoinColumn(name = "usuario_id", referencedColumnName = "id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "perfil_id", referencedColumnName = "id") }
+	)
+	private List<Perfil> perfis;
 	
-	@Transient
-    private String passwordConfirm;
-
+	@Column(name = "ativo", nullable = false, columnDefinition = "TINYINT(1)")
+	private boolean ativo;
+	
+	@Column(name = "codigo_verificador", length = 6)
+	private String codigoVerificador;
+	
 	public User() {
-	}
-
-	public User(Long id, String nome, String email, boolean ativo) {
 		super();
-		this.id = id;
-		this.nome = nome;
+	}
+
+	public User(Long id) {
+		super.setId(id);
+	}
+
+	// adiciona perfis a lista
+	public void addPerfil(PerfilTipo tipo) {
+		if (this.perfis == null) {
+			this.perfis = new ArrayList<>();
+		}
+		this.perfis.add(new Perfil(tipo.getCod()));
+	}
+
+	public User(String email) {
 		this.email = email;
-		this.ativo = ativo;
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
+	
 	public String getEmail() {
 		return email;
 	}
@@ -68,61 +61,36 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public List<Perfil> getPerfis() {
+		return perfis;
+	}
+
+	public void setPerfis(List<Perfil> perfis) {
+		this.perfis = perfis;
+	}
+
 	public boolean isAtivo() {
 		return ativo;
 	}
 
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	}	
 	
-	public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-    
-	public Set<Roles> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Roles> roles) {
-        this.roles = roles;
-    }
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+	public String getCodigoVerificador() {
+		return codigoVerificador;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+	public void setCodigoVerificador(String codigoVerificador) {
+		this.codigoVerificador = codigoVerificador;
 	}
 
 }
