@@ -1,7 +1,7 @@
 package br.com.upnid.entities;
 
 public enum PerfilTipo {
-	ADMIN(1, "ADMIN"), MEDICO(2, "MEDICO"), PACIENTE(3, "PACIENTE");
+	ADMIN(1, "ADMIN"), CLIENTE(2, "CLIENTE");
 	
 	private long cod;
 	private String desc;
