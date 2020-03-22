@@ -8,34 +8,34 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import br.com.upnid.entities.User;
-import br.com.upnid.services.UserService;
-import br.com.upnid.validator.UserValidator;
+import br.com.upnid.entities.Usuario;
+import br.com.upnid.services.UsuarioService;
+import br.com.upnid.validator.UsuarioValidator;
 
 @Controller
-public class UserController {
+public class UsuarioController {
     @Autowired
-    private UserService userService;
+    private UsuarioService userService;
 
     @Autowired
-    private UserValidator userValidator;
+    private UsuarioValidator userValidator;
 
     @GetMapping("/registration")
     public String registration(Model model) {
-        model.addAttribute("userForm", new User());
+        model.addAttribute("userForm", new Usuario());
 
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+    public String registration(@ModelAttribute("userForm") Usuario userForm, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "registration";
         }
 
-        userService.save(userForm);
+        //userService.save(userForm);
 
        // securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
 

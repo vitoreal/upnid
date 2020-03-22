@@ -6,22 +6,22 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import br.com.upnid.entities.User;
-import br.com.upnid.services.UserService;
+import br.com.upnid.entities.Usuario;
+import br.com.upnid.services.UsuarioService;
 
 @Component
-public class UserValidator implements Validator {
+public class UsuarioValidator implements Validator {
 	@Autowired
-	private UserService userService;
+	private UsuarioService userService;
 
 	@Override
 	public boolean supports(Class<?> aClass) {
-		return User.class.equals(aClass);
+		return Usuario.class.equals(aClass);
 	}
 
 	@Override
 	public void validate(Object o, Errors errors) {
-		User user = (User) o;
+		Usuario user = (Usuario) o;
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
 		if (user.getEmail().length() < 6 || user.getEmail().length() > 32) {

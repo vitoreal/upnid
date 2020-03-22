@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "usuarios", indexes = {@Index(name = "idx_usuario_email", columnList = "email")})
-public class User extends AbstractEntity {	
+public class Usuario extends AbstractEntity {	
 	
 	@Column(name = "email", unique = true, nullable = false)
 	private String email;
@@ -33,11 +33,11 @@ public class User extends AbstractEntity {
 	@Column(name = "codigo_verificador", length = 6)
 	private String codigoVerificador;
 	
-	public User() {
+	public Usuario() {
 		super();
 	}
 
-	public User(Long id) {
+	public Usuario(Long id) {
 		super.setId(id);
 	}
 
@@ -49,7 +49,7 @@ public class User extends AbstractEntity {
 		this.perfis.add(new Perfil(tipo.getCod()));
 	}
 
-	public User(String email) {
+	public Usuario(String email) {
 		this.email = email;
 	}
 	

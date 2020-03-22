@@ -8,20 +8,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import br.com.upnid.services.UserService;
+import br.com.upnid.services.UsuarioService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private UserService userService;
+	private UsuarioService userService;
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/webjars/**", "/css/**", "/", "/image/**", "/js/**").permitAll()
+                .antMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
+                .antMatchers("/home/",  "/").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -31,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
             .logout()
+            	.logoutSuccessUrl("/")
                 .permitAll();
     }
 
@@ -38,6 +40,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
 	}
-
     
 }
